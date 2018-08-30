@@ -1,4 +1,5 @@
 public class Main {
+
     public static void main(String [ ] args)
     {
         FileExecute file = new FileExecute("C:\\Users\\adria\\IdeaProjects\\Recruiment_task\\src\\paths\\test.txt");
@@ -12,11 +13,12 @@ public class Main {
         String firstElem = arr[0].id;
         DatabaseMigration first = null;
         DatabaseMigration last = null;
+        int counter = 0;
         for (DatabaseMigration result : arr) {
             if (result.id.contains(firstElem)) {
                 if (result.state.contains("STARTED")) {
                     first = result;
-
+                    arr.remove();
                 } else {
                     last = result;
                 }
@@ -24,13 +26,18 @@ public class Main {
 
         }
 
-        getModelToDB(first, last);
+        Long duration = getModelToDB(first, last);
+        Boolean alert = duration > 4;
+        Migration migration = new Migration(firstElem, duration + "ms", first.type, first.host, alert);
+        System.out.print(firstElem);
+        System.out.print(migration.duration);
+        System.out.print(migration.type);
+        System.out.print(migration.host);
+        System.out.print(migration.alert);
     }
 
-    private static void getModelToDB(DatabaseMigration first,DatabaseMigration last) {
-        Long time = last.timestamp - first.timestamp;
-        System.out.print(last.timestamp + "\n");
-        System.out.print(first.timestamp + "\n");
+    private static Long getModelToDB(DatabaseMigration first, DatabaseMigration last) {
+        return last.timestamp - first.timestamp;
     }
 
 
