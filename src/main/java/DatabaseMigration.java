@@ -11,7 +11,6 @@ public class DatabaseMigration {
         this.type = type;
         this.host = host;
         this.timestamp = timestamp;
-        System.out.println("asd" + id);
     }
 
 

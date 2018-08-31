@@ -1,45 +1,49 @@
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
 public class Main {
+    private static LinkedHashMap <String,DatabaseMigration> startData = new LinkedHashMap<String,DatabaseMigration>();
+    private static LinkedHashMap <String,DatabaseMigration> finishData = new LinkedHashMap<String,DatabaseMigration>();
 
     public static void main(String [ ] args)
     {
-        FileExecute file = new FileExecute("C:\\Users\\adria\\IdeaProjects\\Recruiment_task\\src\\paths\\test.txt");
-        DatabaseMigration[] ArrayResult = file.CreateJsonToObject();
+        FileExecute file = new FileExecute("C:\\Dane\\nowy\\creditsuisse\\src\\paths\\test.txt");
+        ArrayList<DatabaseMigration> ArrayResult = file.CreateJsonToObject();
         findAllPair(ArrayResult);
-
-//        Migration;[]
     }
 
-    private static void findAllPair(DatabaseMigration[] arr) {
-        String firstElem = arr[0].id;
-        DatabaseMigration first = null;
-        DatabaseMigration last = null;
-        int counter = 0;
-        for (DatabaseMigration result : arr) {
-            if (result.id.contains(firstElem)) {
-                if (result.state.contains("STARTED")) {
-                    first = result;
-                    arr.remove();
+    private static void findAllPair(ArrayList<DatabaseMigration> arr) {
+        String firstElem = arr.get(0).id;
+        for (int i=0; i<arr.size(); i++) {
+            if (arr.get(i).id.contains(firstElem)) {
+                if (arr.get(i).state.contains("STARTED")) {
+                    startData.put(arr.get(i).id, arr.get(i));
+                    arr.remove(i);
                 } else {
-                    last = result;
+                    finishData.put(arr.get(i).id, arr.get(i));
+                    arr.remove(i);
                 }
             }
-
+        }
+        if (arr.size() >= 1) {
+            findAllPair(arr);
+        } else  {
+            buildResult();
         }
 
-        Long duration = getModelToDB(first, last);
-        Boolean alert = duration > 4;
-        Migration migration = new Migration(firstElem, duration + "ms", first.type, first.host, alert);
-        System.out.print(firstElem);
-        System.out.print(migration.duration);
-        System.out.print(migration.type);
-        System.out.print(migration.host);
-        System.out.print(migration.alert);
     }
 
-    private static Long getModelToDB(DatabaseMigration first, DatabaseMigration last) {
-        return last.timestamp - first.timestamp;
+    private static void buildResult() {
+       for(String id : startData.keySet()) {
+           DatabaseMigration start = startData.get(id);
+           DatabaseMigration finish = finishData.get(id);
+           Long duration = finish.timestamp - start.timestamp;
+           String durationDB = duration+ "ms";
+           Boolean alert = duration >= 4;
+           Migration dbImport = new Migration(id, durationDB, start.type, start.host, alert);
+           // zapis do bazy
+       }
     }
-
 
 
 }
