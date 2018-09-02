@@ -1,24 +1,28 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.Statement;
 
 public class ConnectionDB {
-        public static void main(String[] args) {
+
+        public void insertToTable(Migration model) {
             Connection con = null;
-
+            Statement stmt = null;
+            int res = 0;
             try {
-                //Registering the HSQLDB JDBC driver
                 Class.forName("org.hsqldb.jdbc.JDBCDriver");
-                //Creating the connection with HSQLDB
-                con = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/test", "SA", "");
-                if (con!= null){
-                    System.out.println("Connection created successfully");
-
-                }else{
-                    System.out.println("Problem with creating connection");
-                }
+                con = DriverManager.getConnection("jdbc:hsqldb:file:C:\\Users\\adria\\IdeaProjects\\Recruiment_task\\hsqldb\\base\\MyBase", "admin", "");
+                stmt = con.createStatement();
+                String sql = "";
+                sql = "INSERT INTO \"PUBLIC\".\"DURATION_RESULT\"\n" +
+                        "( \"ID\", \"DURATION\", \"TYPE\", \"HOST\", \"ALERT\" )\n" +
+                        "VALUES ( '" + model.id + "', '" + model.duration + "', '" + model.type + "', '" + model.host + "', '" + model.alert + "')";
+                res = stmt.executeUpdate(sql);
+                con.commit();
+                con.close();
 
             }  catch (Exception e) {
                 e.printStackTrace(System.out);
             }
         }
+
 }

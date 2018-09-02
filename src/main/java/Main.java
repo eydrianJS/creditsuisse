@@ -5,9 +5,10 @@ public class Main {
     private static LinkedHashMap <String,DatabaseMigration> startData = new LinkedHashMap<String,DatabaseMigration>();
     private static LinkedHashMap <String,DatabaseMigration> finishData = new LinkedHashMap<String,DatabaseMigration>();
 
-    public static void main(String [ ] args)
+    public static void main(String [] args)
     {
-        FileExecute file = new FileExecute("C:\\Dane\\nowy\\creditsuisse\\src\\paths\\test.txt");
+        String path = args[0];
+        FileExecute file = new FileExecute(path);
         ArrayList<DatabaseMigration> ArrayResult = file.CreateJsonToObject();
         findAllPair(ArrayResult);
     }
@@ -41,7 +42,8 @@ public class Main {
            String durationDB = duration+ "ms";
            Boolean alert = duration >= 4;
            Migration dbImport = new Migration(id, durationDB, start.type, start.host, alert);
-           // zapis do bazy
+           ConnectionDB dbConnection = new ConnectionDB();
+           dbConnection.insertToTable(dbImport);
        }
     }
 
