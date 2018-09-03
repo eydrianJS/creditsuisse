@@ -1,5 +1,6 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class ConnectionDB {
@@ -10,13 +11,14 @@ public class ConnectionDB {
             int res = 0;
             try {
                 Class.forName("org.hsqldb.jdbc.JDBCDriver");
-                con = DriverManager.getConnection("jdbc:hsqldb:file:C:\\Users\\adria\\IdeaProjects\\Recruiment_task\\hsqldb\\base\\MyBase", "admin", "");
+                con = DriverManager.getConnection("jdbc:hsqldb:file:\\base\\MyBase", "admin", "");
                 stmt = con.createStatement();
                 String sql = "";
-                sql = "INSERT INTO \"PUBLIC\".\"DURATION_RESULT\"\n" +
+                sql = "INSERT INTO \"PUBLIC.DURATION_RESULT\"\n" +
                         "( \"ID\", \"DURATION\", \"TYPE\", \"HOST\", \"ALERT\" )\n" +
                         "VALUES ( '" + model.id + "', '" + model.duration + "', '" + model.type + "', '" + model.host + "', '" + model.alert + "')";
-                res = stmt.executeUpdate(sql);
+                ResultSet stmta = stmt.executeQuery("SELECT * FROM \"PUBLIC\".DURATION_RESULT LIMIT 100;");
+                System.out.println(stmta);
                 con.commit();
                 con.close();
 
