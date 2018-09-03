@@ -7,7 +7,7 @@ public class Main {
 
     public static void main(String [] args)
     {
-        String path = "C:\\cred\\creditsuisse\\src\\paths\\test.txt";
+        String path = args[0];
         FileExecute file = new FileExecute(path);
         ArrayList<DatabaseMigration> ArrayResult = file.CreateJsonToObject();
         findAllPair(ArrayResult);
