@@ -11,14 +11,12 @@ public class ConnectionDB {
             int res = 0;
             try {
                 Class.forName("org.hsqldb.jdbc.JDBCDriver");
-                con = DriverManager.getConnection("jdbc:hsqldb:file:\\base\\MyBase", "admin", "");
+                con = DriverManager.getConnection("jdbc:hsqldb:file:base\\myBase", "admin", "admin");
                 stmt = con.createStatement();
                 String sql = "";
-                sql = "INSERT INTO \"PUBLIC.DURATION_RESULT\"\n" +
-                        "( \"ID\", \"DURATION\", \"TYPE\", \"HOST\", \"ALERT\" )\n" +
-                        "VALUES ( '" + model.id + "', '" + model.duration + "', '" + model.type + "', '" + model.host + "', '" + model.alert + "')";
-                ResultSet stmta = stmt.executeQuery("SELECT * FROM \"PUBLIC\".DURATION_RESULT LIMIT 100;");
-                System.out.println(stmta);
+                sql = "INSERT INTO duration_result (id, duration, type, host, alert) VALUES ('"+ model.id +
+                        "','"+ model.duration +"','"+ model.type +"','"+ model.host +"',"+ model.alert + ")";
+                res = stmt.executeUpdate(sql);
                 con.commit();
                 con.close();
 
