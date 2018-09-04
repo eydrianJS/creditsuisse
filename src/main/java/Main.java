@@ -1,5 +1,7 @@
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 public class Main {
     private static LinkedHashMap <String,DatabaseMigration> startData = new LinkedHashMap<String,DatabaseMigration>();
@@ -7,8 +9,8 @@ public class Main {
 
     public static void main(String [] args)
     {
-        String path = args[0];
-        FileExecute file = new FileExecute(path);
+//        String path = args[0];
+        FileExecute file = new FileExecute("C:\\Dane\\creditsuisse\\src\\paths\\test.txt");
         ArrayList<DatabaseMigration> ArrayResult = file.CreateJsonToObject();
         findAllPair(ArrayResult);
     }
@@ -35,17 +37,28 @@ public class Main {
     }
 
     private static void buildResult() {
-       for(String id : startData.keySet()) {
+        Set<String> keysID;
+        ArrayList<Migration> insertsToDb= new ArrayList<Migration>();
+        if(startData.size() >= finishData.size()) {
+            keysID = startData.keySet();
+        } else {
+            keysID = finishData.keySet();
+        }
+
+       for(String id : keysID) {
+           if (finishData.get(id) == null) throw new IllegalArgumentException("Id: " + id + " hasn't finish in this file." );
+           if (startData.get(id) == null)  throw new IllegalArgumentException("Id: " + id + " hasn't start in this file." );
            DatabaseMigration start = startData.get(id);
            DatabaseMigration finish = finishData.get(id);
            Long duration = finish.timestamp - start.timestamp;
            String durationDB = duration+ "ms";
            Boolean alert = duration >= 4;
            Migration dbImport = new Migration(id, durationDB, start.type, start.host, alert);
-           ConnectionDB dbConnection = new ConnectionDB();
-           dbConnection.insertToTable(dbImport);
+           insertsToDb.add(dbImport);
        }
+
+        ConnectionDB dbConnection = new ConnectionDB();
+        dbConnection.insertToTable(insertsToDb);
+//        System.out.println("All result has been adding");
     }
-
-
 }

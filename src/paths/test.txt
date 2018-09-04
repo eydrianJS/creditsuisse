@@ -1,6 +1,6 @@
-{"id":"scsmbstgra21", "state":"STARTED", "type":"APPLICATION_LOG", "host":"12345", "timestamp":1491377495212}
-{"id":"scsmbstgrb31", "state":"STARTED", "timestamp":1491377495213}
-{"id":"scsmbstgrc41", "state":"FINISHED", "timestamp":1491377495218}
-{"id":"scsmbstgra21", "state":"FINISHED", "type":"APPLICATION_LOG", "host":"12345", "timestamp":1491377495217}
-{"id":"scsmbstgrc41", "state":"STARTED", "timestamp":1491377495210}
-{"id":"scsmbstgrb31", "state":"FINISHED", "timestamp":1491377495216}
+{"id":"test", "state":"STARTED", "type":"APPLICATION_LOG", "host":"12345", "timestamp":1491377495212}
+{"id":"testb", "state":"STARTED", "timestamp":1491377495213}
+{"id":"test", "state":"FINISHED", "timestamp":1491377495218}
+{"id":"testb", "state":"FINISHED", "type":"APPLICATION_LOG", "host":"12345", "timestamp":1491377495217}
+{"id":"testc", "state":"STARTED", "timestamp":1491377495210}
+{"id":"testc", "state":"FINISHED", "timestamp":1491377495216}

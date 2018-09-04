@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import org.json.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -18,8 +19,14 @@ public class FileExecute {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                Gson gson = new Gson();
-                ArrayResult.add(gson.fromJson(line, DatabaseMigration.class));
+                try {
+                    new JSONObject(line);
+                    Gson gson = new Gson();
+                    ArrayResult.add(gson.fromJson(line, DatabaseMigration.class));
+                } catch (Exception ex) {
+                    System.out.println("File is is damaged or some line not used JSON.");
+                    throw new IllegalArgumentException("File is is damaged or some line not used JSON.");
+                }
             }
 
         } catch (IOException e) {
