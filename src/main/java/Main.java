@@ -16,24 +16,14 @@ public class Main {
     }
 
     private static void findAllPair(ArrayList<DatabaseMigration> arr) {
-        String firstElem = arr.get(0).id;
         for (int i=0; i<arr.size(); i++) {
-            if (arr.get(i).id.contains(firstElem)) {
-                if (arr.get(i).state.contains("STARTED")) {
-                    startData.put(arr.get(i).id, arr.get(i));
-                    arr.remove(i);
-                } else {
-                    finishData.put(arr.get(i).id, arr.get(i));
-                    arr.remove(i);
-                }
+            if (arr.get(i).state.contains("STARTED")) {
+                startData.put(arr.get(i).id, arr.get(i));
+            } else {
+                finishData.put(arr.get(i).id, arr.get(i));
             }
         }
-        if (arr.size() >= 1) {
-            findAllPair(arr);
-        } else  {
-            buildResult();
-        }
-
+        buildResult();
     }
 
     private static void buildResult() {
@@ -52,13 +42,12 @@ public class Main {
            DatabaseMigration finish = finishData.get(id);
            Long duration = finish.timestamp - start.timestamp;
            String durationDB = duration+ "ms";
-           Boolean alert = duration >= 4;
+           Boolean alert = duration > 4;
            Migration dbImport = new Migration(id, durationDB, start.type, start.host, alert);
            insertsToDb.add(dbImport);
        }
 
         ConnectionDB dbConnection = new ConnectionDB();
         dbConnection.insertToTable(insertsToDb);
-//        System.out.println("All result has been adding");
     }
 }

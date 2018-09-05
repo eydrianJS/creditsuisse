@@ -32,10 +32,8 @@ public class ConnectionDB {
                 connection();
                 Statement stmt = con.createStatement();
                 ResultSet resultSet = stmt.executeQuery(sqlSelects);
-//                System.out.println(resultSet.next());
-                if (resultSet.next()) {
-                    throw new IllegalArgumentException("One ID is set in DB." );
-                }
+
+                if (resultSet.next()) throw new IllegalArgumentException("One ID is set in DB." );
                 res = stmt.executeUpdate(sqlInserts);
                 con.commit();
                 con.close();
